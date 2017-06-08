@@ -1,0 +1,223 @@
+---
+layout: default
+---
+
+<!-- Grafo cover -->
+<!-- =========== -->
+<section id="graph" class="{{ page.grafo }}"></section>
+
+<!-- Usuario mas Influynetes -->
+<!-- ======================= -->
+<section id="more-influential">
+  <div class="container">
+
+    <h2>Usuario Más Infuyentes</h2>
+    
+    <div class="row">
+      {% for member in page.top_users %}
+      <div class="col-sm-6 col-md-3">
+	<div class="box-def">
+	  <img src="{{ member.profile_img_url }}"
+	       class="img-responsive"
+	       alt="img de perfil de twitter de {{ member.name }}">
+
+	  <h3>{{ member.user_name }} |
+	    <a href="https://twitter.com/{{ member.screen_name }}"
+	       target="_blank" >
+	       {{ member.screen_name }}
+	    </a>
+	  </h3>
+
+	  <ul style="list-style-type:disc">
+	    <li>Influencia: {{ member.weight}}</li>
+	    <li>Following: {{ member.following_count }}</li>
+	    <li>Followers: {{ member.followers_count }}</li>
+	    <li>Tweets: {{ member.tweets_count }}</li>
+	  </ul>
+	  
+	</div><!--/box-def -->
+      </div><!--/col -->
+      {% endfor %}
+    </div><!--/row -->
+
+  </div><!--/container -->
+</section>
+
+
+<!-- Imagenes mas compartidas -->
+<!-- ======================== -->
+<section id="top-img">
+  <div class="container">
+    <h2>Imagenes Más Compartidas</h2>
+
+    <div class="row">
+      {% for img in page.top_imgs %}
+      <div class="col-sm-6 col-md-3">
+	<div class="box-def">
+	  <img src="{{ img.url }}"
+	       class="img-responsive">
+
+	  <h3>Compartida: {{ img.amount_shared }}</h3>
+
+	</div><!--/box-def -->
+      </div><!--/col -->
+      {% endfor %}
+    </div><!--/row -->
+
+  </div><!--/container -->
+</section>
+
+
+<!-- De que Hablan -->
+<!-- ============= -->
+<section id="about_talk">
+  <div class="container">
+
+    <h2>¿De Que Hablan?</h2>
+
+    <div class="row">
+
+      <div class="col-sm-6 col-sm-offset-3">
+	<div id="hist_hashtag"></div>
+      </div><!--/col -->
+
+    </div><!--/row -->
+    
+  </div><!--/container -->
+</section>
+
+
+<!-- SO donde usan Twitter -->
+<!-- ===================== -->
+<section id="so_twitter">
+  <div class="container">
+
+    <h2>¿De Donde Usan Twitter?</h2>
+
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+	<div id="so_plot"></div>
+      </div><!--/col -->
+    </div><!--/row -->
+
+  </div><!--/container -->
+</section>
+
+
+<!-- Histogram of hashtag -->
+<!-- ==================== -->
+<script>
+  Highcharts.chart('hist_hashtag', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: 'Top de Hashtag Utilizados'
+    },
+    xAxis: {
+        type: 'category',
+        labels: {
+            rotation: -45,
+            style: {
+                fontSize: '13px',
+                fontFamily: 'Verdana, sans-serif'
+            }
+        }
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Cantidad de ocurrencia'
+        }
+    },
+    legend: {
+        enabled: false
+    },
+    tooltip: {
+        pointFormat: 'Ocurrencias: <b>{point.y:.1f} </b>'
+    },
+    series: [{
+        name: 'Population',
+        data: {{ page.data_hashtag | jsonify }}
+    }]
+  });
+</script>
+
+
+<!-- Histogram of Words -->
+<!-- ================== -->
+<script>
+  Highcharts.chart('hist_words', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: 'Top de Palabras Utilizadas'
+    },
+    xAxis: {
+        type: 'category',
+        labels: {
+            rotation: -45,
+            style: {
+                fontSize: '13px',
+                fontFamily: 'Verdana, sans-serif'
+            }
+        }
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Cantidad de ocurrencia'
+        }
+    },
+    legend: {
+        enabled: false
+    },
+    tooltip: {
+        pointFormat: 'Ocurrencias: <b>{point.y:.1f} </b>'
+    },
+    series: [{
+        name: 'Population',
+        data: {{ page.data_words  | jsonify }}
+  }]
+  });
+</script>
+
+
+<!-- Plot del SO -->
+<!-- =========== -->
+<script>
+  Highcharts.chart('so_plot', {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+    },
+    title: {
+        text: 'Sistema Operativo de los Usuarios'
+    },
+    tooltip: {
+        pointFormat: '<b>{point.percentage:.1f}%</b>'
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                style: {
+                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                }
+            }
+        }
+    },
+    series: [{
+        name: 'Brands',
+        colorByPoint: true,
+        data: {{ page.data_so | jsonify }}
+    }]
+  });
+</script>
+
