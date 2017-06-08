@@ -17,7 +17,7 @@ layout: default
       {% for member in page.top_users %}
       <div class="col-sm-6 col-md-3">
 	<div class="box-def">
-	  <img src="{{ member.profile_img_url }}"
+	  <img src="{{ "{{ member.profile_img_url }}" | prepend: site.baseurl }}"
 	       class="img-responsive"
 	       alt="img de perfil de twitter de {{ member.name }}">
 
@@ -54,7 +54,7 @@ layout: default
       {% for img in page.top_imgs %}
       <div class="col-sm-6 col-md-3">
 	<div class="box-def">
-	  <img src="{{ img.url }}"
+	  <img src="{{ "{{ img.url }}" | prepend: site.baseurl }}"
 	       class="img-responsive">
 
 	  <h3>Compartida: {{ img.amount_shared }}</h3>
